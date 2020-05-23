@@ -1,0 +1,234 @@
+// Summary: (This challenge took me 3 hours 58 mins to complete.)C++14
+// The roman numeral converter has a menu with 3 options: A, B, and any button to exit. 
+// The first part: coverting Roman Numeral to Integer used a function to return all roman symbols, calculate the output, and check the validation of Roman Numerals.
+// The second part: coverting Integer to Roman Numeral used a loop to "Mod" and accumulate every Roman Numerals to the correct places and output the result. (vice versa)
+// The third part: Exit. ()<-- requirement
+#include <iostream>
+
+#include <string>
+
+using namespace std;
+
+//retrun value of roman symbols
+int value(char roman) {
+  switch (roman) {
+  case 'I':
+    return 1;
+  case 'V':
+    return 5;
+  case 'X':
+    return 10;
+  case 'L':
+    return 50;
+  case 'C':
+    return 100;
+  case 'D':
+    return 500;
+  case 'M':
+    return 1000;
+  }
+  return 0;
+}
+
+//convert Roman Numerals to Integer
+int romanToInt(string A) {
+  int i, n, ans = 0, p = 0;
+  n = A.length() - 1;
+
+  for (i = n; i >= 0; i--) {
+    //addtractive notation (1st Rule)
+    if (value(A[i]) >= p) {
+      ans += value(A[i]);
+    }
+    ////subtractive notation (2nd Rule & 3rd Rule)
+    else {
+      ans -= value(A[i]);
+    }
+    p = value(A[i]);
+  }
+  return ans;
+}
+
+//menu
+void menu() {
+  cout << "This is a roman numeral converter." << endl;
+  cout << "3 Options: " << endl;
+  cout << "Press \"A\" to convert roman numeral (XCIX) to integer (99)." << endl;
+  cout << "Press \"B\" to convert integer (99) to roman numeral (XCIX)." << endl;
+  cout << "Press any button to exit." << endl;
+  cout << "Your input: ";
+}
+
+//Main Function
+int main() {
+  string userInput;
+  string romanInput;
+  string roman;
+  string romanCheck;
+  int num;
+  int integer;
+  int p; //The alternation of piece
+  int piece;
+
+  menu();
+  cin >> userInput;
+
+  //convert roman numeral (XCIX) to integer (99)
+  if (userInput == "A" || userInput == "a") {
+    cout << "Please type in your Roman Numerals: (MUST ALL IN CAPITAL)" << endl;
+    cin >> romanInput;
+    num = romanToInt(romanInput);
+    // check the validation of Roman Numerals.
+    //A symbol representing 10^x may not precede any symbol larger than 10^x+1. (4th Rule)
+    if (num >= 1000) {
+      p = (num / 1000);
+
+      for (int i = 0; i < p; i++) {
+        romanCheck += 'M';
+      }
+      num %= 1000;
+    }
+    if (num >= 100) {
+      p = (num / 100);
+      if (p == 9) {
+        romanCheck += "CM";
+      } else if (p >= 5) {
+        romanCheck += 'D';
+        for (int i = 0; i < p - 5; i++) {
+          romanCheck += 'C';
+        }
+      } else if (p == 4) {
+        romanCheck += "CD";
+      } else if (p >= 1) {
+        for (int i = 0; i < p; i++) {
+          romanCheck += 'C';
+        }
+      }
+      num %= 100;
+    }
+
+    if (num >= 10) {
+      p = (num / 10);
+      if (p == 9) {
+        romanCheck += "XC";
+      } else if (p >= 5) {
+        romanCheck += 'L';
+        for (int i = 0; i < p - 5; i++) {
+          romanCheck += 'X';
+        }
+      } else if (p == 4) {
+        romanCheck += "XL";
+      } else if (p >= 1) {
+        for (int i = 0; i < p; i++) {
+          romanCheck += 'X';
+        }
+      }
+      num %= 10;
+    }
+    if (num >= 1) {
+      p = num;
+      if (p == 9) {
+        romanCheck += "IX";
+      } else if (p >= 5) {
+        romanCheck += "V";
+        for (int i = 0; i < p - 5; i++) {
+          romanCheck += 'I';
+        }
+      } else if (p == 4) {
+        romanCheck += "IV";
+      } else if (p >= 1) {
+        for (int i = 0; i < p; i++) {
+          romanCheck += 'I';
+        }
+      }
+    }
+    // if the roman numerals are invalid.
+    if (romanCheck != romanInput) {
+      cout << "Invalid Roman Numerals." << endl;
+    }
+    // output the result of coverting Roman Numerals to integer.
+    else {
+      num = romanToInt(romanInput);
+      cout << "The integer: " << num << endl;
+    }
+    return 0;
+  }
+  //covert integer (99) to roman numeral (XCIX).
+  else if (userInput == "B" || userInput == "b") {
+    cout << "Please type in your integer(1 ~ 3999): " << endl;
+    cin >> integer;
+    if ((integer >= 4000) || (integer <= 0)) {
+      cout << "Invalid Integer" << endl;
+    } else {
+      //A symbol representing 10^x may not precede any symbol larger than 10^x+1. (4th Rule)
+      if (integer >= 1000) {
+        piece = (integer / 1000);
+
+        for (int i = 0; i < piece; i++) {
+          roman += 'M';
+        }
+        integer %= 1000;
+      }
+      if (integer >= 100) {
+        piece = (integer / 100);
+        if (piece == 9) {
+          roman += "CM";
+        } else if (piece >= 5) {
+          roman += 'D';
+          for (int i = 0; i < piece - 5; i++) {
+            roman += 'C';
+          }
+        } else if (piece == 4) {
+          roman += "CD";
+        } else if (piece >= 1) {
+          for (int i = 0; i < piece; i++) {
+            roman += 'C';
+          }
+        }
+        integer %= 100;
+      }
+
+      if (integer >= 10) {
+        piece = (integer / 10);
+        if (piece == 9) {
+          roman += "XC";
+        } else if (piece >= 5) {
+          roman += 'L';
+          for (int i = 0; i < piece - 5; i++) {
+            roman += 'X';
+          }
+        } else if (piece == 4) {
+          roman += "XL";
+        } else if (piece >= 1) {
+          for (int i = 0; i < piece; i++) {
+            roman += 'X';
+          }
+        }
+        integer %= 10;
+      }
+      if (integer >= 1) {
+        piece = integer;
+        if (piece == 9) {
+          roman += "IX";
+        } else if (piece >= 5) {
+          roman += "V";
+          for (int i = 0; i < piece - 5; i++) {
+            roman += 'I';
+          }
+        } else if (piece == 4) {
+          roman += "IV";
+        } else if (piece >= 1) {
+          for (int i = 0; i < piece; i++) {
+            roman += 'I';
+          }
+        }
+      }
+      // output Roman Numeral
+      cout << "Roman Numeral: " << roman << endl;
+    }
+  }
+  // Exit
+  else if (userInput != "A" || userInput != "a" || userInput != "B" || userInput != "b") {
+    return 0;
+  }
+}
